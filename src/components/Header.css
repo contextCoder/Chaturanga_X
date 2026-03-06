@@ -1,0 +1,134 @@
+.header {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.chess-piece {
+  font-size: 2rem;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: opacity 0.3s ease;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover {
+  opacity: 0.8;
+  border-bottom-color: #ffd700;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btn-login,
+.btn-signup {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.btn-login {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.btn-login:hover {
+  background: white;
+  color: #1e3c72;
+}
+
+.btn-signup {
+  background: #ffd700;
+  color: #1e3c72;
+  border: 2px solid #ffd700;
+}
+
+.btn-signup:hover {
+  background: #ffed4e;
+  border-color: #ffed4e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+
+  .nav-menu {
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .logo h1 {
+    font-size: 1.2rem;
+  }
+
+  .header-actions {
+    gap: 0.5rem;
+  }
+
+  .btn-login,
+  .btn-signup {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,171 @@
+.hero {
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  color: white;
+  padding: 4rem 2rem;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+}
+
+.hero-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  width: 100%;
+}
+
+.hero-text h2 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.btn-play-now,
+.btn-learn {
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-play-now {
+  background: #ffd700;
+  color: #0f2027;
+}
+
+.btn-play-now:hover {
+  background: #ffed4e;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+}
+
+.btn-learn {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.btn-learn:hover {
+  background: white;
+  color: #0f2027;
+  transform: translateY(-4px);
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chess-board-preview {
+  perspective: 1000px;
+  animation: floatBoard 6s ease-in-out infinite;
+}
+
+@keyframes floatBoard {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg) rotateZ(-5deg);
+  }
+  50% {
+    transform: translateY(-20px) rotateX(5deg) rotateZ(5deg);
+  }
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  width: 300px;
+  height: 300px;
+  gap: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.square {
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.square.light {
+  background: #95c9c9;
+}
+
+.square.dark {
+  background: #4033f8;
+}
+
+@media (max-width: 1024px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .hero-text h2 {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .board {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 2rem 1rem;
+    min-height: auto;
+  }
+
+  .hero-text h2 {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .btn-play-now,
+  .btn-learn {
+    width: 100%;
+    padding: 0.8rem 2rem;
+  }
+
+  .board {
+    width: 200px;
+    height: 200px;
+  }
+}

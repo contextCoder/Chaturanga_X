@@ -1,0 +1,105 @@
+.clock {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  min-width: 220px;
+  text-align: center;
+  position: fixed;
+  z-index: 50;
+}
+
+.clock-top-left {
+  top: 100px;
+  left: 20px;
+}
+
+.clock-bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.player-name {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffd700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.clock-display {
+  font-size: 2.5rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.clock-display.active {
+  border-color: #ffd700;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+@media (max-width: 1024px) {
+  .clock {
+    min-width: 180px;
+    padding: 1rem;
+  }
+
+  .player-name {
+    font-size: 1rem;
+  }
+
+  .clock-display {
+    font-size: 1.8rem;
+    padding: 0.7rem;
+  }
+
+  .clock-top-left {
+    top: 80px;
+    left: 10px;
+  }
+
+  .clock-bottom-right {
+    bottom: 10px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .clock {
+    min-width: 150px;
+    padding: 0.8rem;
+  }
+
+  .player-name {
+    font-size: 0.9rem;
+  }
+
+  .clock-display {
+    font-size: 1.4rem;
+    padding: 0.5rem;
+  }
+
+  .clock-top-left {
+    top: 70px;
+    left: 5px;
+  }
+
+  .clock-bottom-right {
+    bottom: 5px;
+    right: 5px;
+  }
+}
