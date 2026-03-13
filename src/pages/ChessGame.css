@@ -194,9 +194,22 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.board-container > div {
+.board-container>div {
   width: 100%;
   max-width: 600px;
+}
+
+.game-over-popup {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  z-index: 100;
 }
 
 @media (max-width: 1024px) {

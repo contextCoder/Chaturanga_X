@@ -2,27 +2,34 @@ import { useState, useEffect } from "react";
 import { Chess } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import Clock from "../components/Clock";
+import GameOptions from "../components/utils/Game.Options";
 import "./ChessGame.css";
 
 export default function ChessGame() {
   const [game, setGame] = useState(new Chess());
-  const [whitePlayerName, setWhitePlayerName] = useState("Guest (White)");
-  const [blackPlayerName, setBlackPlayerName] = useState("Guest (Black)");
-  const [whiteTimeLeft, setWhiteTimeLeft] = useState(300);
-  const [blackTimeLeft, setBlackTimeLeft] = useState(300);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [editingWhite, setEditingWhite] = useState(false);
-  const [editingBlack, setEditingBlack] = useState(false);
-  const [tempWhiteName, setTempWhiteName] = useState(whitePlayerName);
-  const [tempBlackName, setTempBlackName] = useState(blackPlayerName);
+  const [initialTime, setInitialTime] = useState(null);
+  const [whiteTimeLeft, setWhiteTimeLeft] = useState(5);
+  const [blackTimeLeft, setBlackTimeLeft] = useState(5);
+
+  const [gameStarted, setGameStarted] = useState(true);
+  const [gameOverMessage, setGameOverMessage] = useState("");
+
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [possibleMoves, setPossibleMoves] = useState([]);
 
   const isWhiteTurn = game.turn() === "w";
 
-  // TIMER
+  const startGame = (seconds) => {
+    setInitialTime(seconds);
+    setWhiteTimeLeft(seconds);
+    setBlackTimeLeft(seconds);
+    setGameStarted(true);
+  };
+  /*
+  TIMER
+  */
   useEffect(() => {
-    if (!gameStarted || game.isGameOver()) return;
+    if (!gameStarted || gameOverMessage || !initialTime) return;
 
     const interval = setInterval(() => {
       if (isWhiteTurn) {
@@ -33,9 +40,22 @@ export default function ChessGame() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [gameStarted, isWhiteTurn, game]);
+  }, [isWhiteTurn, gameStarted, gameOverMessage]);
 
-  // MOVE LOGIC
+  /*
+  TIMEOUT DETECTION
+  */
+  useEffect(() => {
+    if (!initialTime) return;
+    
+    game.isCheckmate() && setGameOverMessage(isWhiteTurn ? "Black wins by checkmate!" : "White wins by checkmate!");
+    game.isStalemate() && setGameOverMessage("It's a stalemate!");
+    game.isInsufficientMaterial() && setGameOverMessage("Draw by insufficient material!");
+  }, [whiteTimeLeft, blackTimeLeft]);
+
+  /*
+  MOVE LOGIC
+  */
   const makeMove = (from, to) => {
     const newGame = new Chess(game.fen());
 
@@ -51,7 +71,9 @@ export default function ChessGame() {
     return true;
   };
 
-  // DRAG & DROP
+  /*
+  DRAG DROP
+  */
   const handlePieceDrop = (sourceSquare, targetSquare) => {
     const moveMade = makeMove(sourceSquare, targetSquare);
 
@@ -63,7 +85,9 @@ export default function ChessGame() {
     return moveMade;
   };
 
-  // CLICK TO MOVE
+  /*
+  CLICK MOVE
+  */
   const handleSquareClick = (square) => {
     if (!selectedSquare) {
       const piece = game.get(square);
@@ -78,6 +102,7 @@ export default function ChessGame() {
         const moves = game.moves({ square, verbose: true });
         setPossibleMoves(moves.map((m) => m.to));
       }
+
       return;
     }
 
@@ -88,74 +113,90 @@ export default function ChessGame() {
     }
 
     const moveMade = makeMove(selectedSquare, square);
+
     if (moveMade) {
       setSelectedSquare(null);
       setPossibleMoves([]);
     }
   };
 
+  /*
+  RESET GAME
+  */
   const resetGame = () => {
-    const newGame = new Chess();
-    setGame(newGame);
+    setGame(new Chess());
+    setWhiteTimeLeft(initialTime);
+    setBlackTimeLeft(initialTime);
+    setGameOverMessage("");
     setSelectedSquare(null);
     setPossibleMoves([]);
-    setGameStarted(false);
-    setWhiteTimeLeft(300);
-    setBlackTimeLeft(300);
   };
 
   return (
-    <div className="chess-game-container">
-      <div className="chess-game">
-        <div className="control-panel">
+    <>
+      {!initialTime && (
+          <GameOptions onStart={startGame} />
+        )}
 
-          {game.isGameOver() && <div className="game-over">Game Over!</div>}
-
-          <div className="button-group">
-            <button onClick={resetGame}>Reset</button>
+      <div className="chess-game-container">
+        {gameOverMessage && (
+          <div className="game-over-popup">
+            <h2>Game Over</h2>
+            <p>{gameOverMessage}</p>
+            <button onClick={resetGame}>Play Again</button>
           </div>
-        </div>
+        )}
+        <div className="chess-game">
+          <Clock
+            time={blackTimeLeft}
+            isActive={!isWhiteTurn}
+            width={137}
+            height={80}
+            top={"2.5em"}
+            right={0}
+          />
+
+          <div className="board-container">
+            <Chessboard
+              position={game.fen()}
+              onPieceDrop={handlePieceDrop}
+              onSquareClick={handleSquareClick}
+              boardWidth={600}
+              customBoardStyle={{
+                borderRadius: "8px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+              }}
+              customDarkSquareStyle={{ backgroundColor: "#c58d5e" }}
+              customLightSquareStyle={{ backgroundColor: "#f0d9b5" }}
+              customSquareStyles={{
+                ...Object.fromEntries(
+                  possibleMoves.map((move) => [
+                    move,
+                    {
+                      backgroundColor: "rgba(255,215,0,0.4)",
+                      borderRadius: "50%",
+                    },
+                  ])
+                ),
+                ...(selectedSquare && {
+                  [selectedSquare]: {
+                    backgroundColor: "rgba(255,215,0,0.8)",
+                  },
+                }),
+              }}
+            />
+          </div>
 
           <Clock
-            initialTime={blackTimeLeft}
-            isActive={gameStarted && !isWhiteTurn}
-          />
-        <div className="board-container">
-          <Chessboard
-            position={game.fen()}
-            onPieceDrop={handlePieceDrop}
-            onSquareClick={handleSquareClick}
-            arePiecesDraggable={true}
-            boardWidth={600}
-            customBoardStyle={{
-              borderRadius: "8px",
-              boxShadow: "0 10px 30px rgba(247, 31, 31, 0.3)",
-            }}
-            customDarkSquareStyle={{ backgroundColor: "#c58d5e" }}
-            customLightSquareStyle={{ backgroundColor: "#f0d9b5" }}
-            customSquareStyles={{
-              ...Object.fromEntries(
-                possibleMoves.map((move) => [
-                  move,
-                  {
-                    backgroundColor: "rgba(255,215,0,0.4)",
-                    borderRadius: "50%",
-                  },
-                ])
-              ),
-              ...(selectedSquare && {
-                [selectedSquare]: {
-                  backgroundColor: "rgba(255,215,0,0.8)",
-                },
-              }),
-            }}
+            time={whiteTimeLeft}
+            isActive={isWhiteTurn}
+            width={137}
+            height={80}
+            top={"22em"}
+            right={0}
           />
         </div>
-          <Clock
-            initialTime={blackTimeLeft}
-            isActive={gameStarted && !isWhiteTurn}
-          />
       </div>
-    </div>
+    </>
   );
 }
